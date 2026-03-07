@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
+import routes from "./routes/routes.js";
 
 dotenv.config();
 
@@ -10,9 +11,7 @@ connectDB();
 
 const port = process.env.PORT;
 
-app.get("/api/books", (req, res) => {
-  res.send("hello world");
-});
+app.use("/api/books", routes);
 
 app.listen(port, () => {
   console.log(`server is running ${port}`);

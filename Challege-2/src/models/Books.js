@@ -6,7 +6,7 @@ const BookSchema = new Schema(
       type: String,
       required: [true, "Book title is required"],
       trim: true,
-      max: [100, "Title most be less then 100 worlds"],
+      maxlength: [100, "Title most be less then 100 worlds"],
     },
 
     author: {
@@ -24,8 +24,8 @@ const BookSchema = new Schema(
       type: String,
       required: true,
       enum: {
-        value: ["Fiction", "Non-Fiction", "Science", "History", "Technology"],
-        message: "{Value} is not a valid category",
+        values: ["Fiction", "Non-Fiction", "Science", "History", "Technology"],
+        message: "{VALUE} is not a valid category",
       },
     },
     pages: {
