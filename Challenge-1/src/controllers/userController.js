@@ -10,16 +10,24 @@ export const getSingleUserById = (req, res) => {
     console.log({id}, "req");
 
 
-    const user = data.filter((user) => user.id === Number(id))
+    // const user = data.filter((user) => user.id === Number(id))
 
-    console.log(user);
+    // console.log(user);
     
     
-    if(user.length != 0){
-        return res.status(200).json({user : user[0]});
-    }else {
-        return res.status(404).json({message : "User not found"})
+    // if(user.length != 0){
+    //     return res.status(200).json({user : user[0]});
+    // }else {
+    //     return res.status(404).json({message : "User not found"})
+    // }
+
+    const user = data.find((user) => user.id === Number(id));
+
+    if(!user){
+        return res.status(400).json({message : "User Not found"})
     }
+
+    return res.status(200).json({data : user})
 
 }
 
@@ -36,37 +44,39 @@ export const createNewUser = (req, res) => {
         city
     });
 
-    return res.status(200).json({message : data});
+    return res.status(201).json({message : data}); // status not 200 -- 201 if new resource created
 }
 
 
 export const updateUserDetails  = (req, res) => {
-    const {name , age } = req.body;
     
     const id = req.params.id;
 
 
     for(let i = 0; i < data.length; i++){
         if(data[i].id === Number(id)){
-            data[i].name = name;
-            data[i].age = age
+           data[i] = {
+            ...data[i], 
+            ...req.body,
+            id : data[i].id
+           }
 
-            res.status(200).json({message : data});
+           return res.status(200).json({ success: true, data: data[i] });
         }
     }
 
 
-    res.status(400).json({message : "User not found"})
+    return res.status(404).json({message : "User not found"})
 }
 
 
 export const deleteUserById = (req, res) => {
     const id = req.params.id;
 
-    const deletedUserArr = data.filter((user) => user.id != Number(id))
-    
-    
-    if(deletedUserArr.length === data.length){
-        res.status(400).json({message : "User not deleted"});
-    }else res.status(200).json({message : deletedUserArr});
+    const index = data.findIndex((user) => user.id === Number(id));
+
+    if(index != -1){
+        data.splice(index, 1);
+        return res.status(200).json({message : data});
+    }else return res.status(404).json({message : "Not Deleted"})
 }
