@@ -112,13 +112,11 @@ export const getBooksByCategory = async (req, res) => {
 
     console.log(cat);
 
-    const allBooks = await Books.find();
+    const books = await Books.find({ category: cat });
 
-    if (!allBooks) return errorMessage(res, 404, "No books");
+    if (!books) return errorMessage(res, 404, "No books");
 
-    const filteredBooks = allBooks.filter((book) => book.category === cat);
-
-    return successMessage(res, 200, "filter book", filteredBooks);
+    return successMessage(res, 200, "filter book", books);
   } catch (err) {
     errorMessage(res, 400, err.message);
   }
